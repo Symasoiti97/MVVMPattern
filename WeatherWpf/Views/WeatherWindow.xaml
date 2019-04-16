@@ -1,0 +1,29 @@
+﻿<Window x:Class="WeatherWpf.Views.WeatherWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WeatherWpf.Views"
+        xmlns:vm="clr-namespace:WeatherWpf.ViewModels"
+        mc:Ignorable="d"
+        Style="{StaticResource WeatherWindow}"
+        Title="{Binding City}">
+
+    <Window.DataContext>
+        <vm:WeatherViewModel/>
+    </Window.DataContext>
+    
+    <Grid>
+        <StackPanel>
+            <TextBlock Text="{Binding Temp}"
+                       Style="{StaticResource BaseTextBlock}"
+                       Margin="10"/>
+            <TextBlock Text="{Binding Pressure}"
+                       Style="{StaticResource BaseTextBlock}"
+                       Margin="10"/>
+            <TextBlock Text="{Binding Humidity}"
+                       Style="{StaticResource BaseTextBlock}"
+                       Margin="10"/>
+        </StackPanel>
+    </Grid>
+</Window>
