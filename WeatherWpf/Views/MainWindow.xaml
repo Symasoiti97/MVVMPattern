@@ -12,7 +12,7 @@
         <vm:MainViewModel/>
     </Window.DataContext>
 
-    <Grid Background="LightBlue">
+    <Grid>
 
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
@@ -22,18 +22,20 @@
 
         <StackPanel Grid.Row="0" Orientation="Horizontal">
 
-            <TextBox Text="{Binding TextBoxCity}"
+            <TextBox Text="{Binding TextBoxRegion}"
                      Style="{StaticResource BaseTextBox}"
                      Tag="Region"
                      Margin="5"
-                     MinWidth="150"
-                     MaxWidth="150"/>
-            <TextBox Text="{Binding TimeParse}"
+                     MinWidth="130"
+                     MaxWidth="130"/>
+            <TextBox Text="{Binding TimeParse, StringFormat=100}"
                      Style="{StaticResource BaseTextBox}"
-                     Tag="Time"
+                     Tag="Time Parse"
+                     FontSize="14"
+                     TextAlignment="Center"
                      Margin="5"
-                     MinWidth="70"
-                     MaxWidth="70"/>
+                     MinWidth="90"
+                     MaxWidth="90"/>
         </StackPanel>
         
         <Grid Grid.Row="1">
@@ -45,14 +47,11 @@
             
             <StackPanel Grid.Column="0">
                 <TextBlock Text="Temperature" 
-                           Style="{StaticResource BaseTextBlock}"
-                           Margin="9"/>
+                           Style="{StaticResource BaseTextBlock}"/>
                 <TextBlock Text="Pressure"
-                           Style="{StaticResource BaseTextBlock}"
-                           Margin="9"/>
+                           Style="{StaticResource BaseTextBlock}"/>
                 <TextBlock Text="Humidity" 
-                           Style="{StaticResource BaseTextBlock}"
-                           Margin="9"/>
+                           Style="{StaticResource BaseTextBlock}"/>
             </StackPanel>
 
             <StackPanel Grid.Column="1">
@@ -90,7 +89,7 @@
                     <ToggleButton Content="%"
                                   Style="{StaticResource BaseToggleButton}"
                                   IsChecked="True"
-                                  Margin="0,5"
+                                  Margin="0,6"
                                   MinWidth="25"
                                   IsEnabled="False"/>
                 </StackPanel>

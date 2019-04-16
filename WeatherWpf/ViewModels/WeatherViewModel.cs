@@ -7,63 +7,52 @@ using WeatherWpf.Models;
 
 namespace WeatherWpf.ViewModels
 {
-    public class WeatherViewModel : BaseViewModel
+    class WeatherViewModel : BaseViewModel
     {
         public WeatherViewModel()
         {
             _weather = new Weather();
+            WeatherSett = new WeatherSetting();
         }
 
-        private string _city;
         private Weather _weather;
-        public string MeasureTemp { get; set; }
-        public string MeasurePressure { get; set; }
-        public string TimeParse { get; set; }
 
-        private void Show(Weather obj)
-        {
-            Temp = WeatherSetting.MeasureTempSet(obj.Temperature, MeasureTemp).ToString();
-            Pressure = WeatherSetting.MeasurePressureSet(obj.Pressure, MeasurePressure).ToString();
-            Humidity = obj.Humidity.ToString();
-        }
+        public WeatherSetting WeatherSett { get; set; }
 
         private void StartParse()
         {
-            string url = ConfigurationManager.AppSettings.Get("JsonOWM").Replace("City", City); ;
+            string url = ConfigurationManager.AppSettings.Get("JsonOWM").Replace("Region", WeatherSett.Region); ;
             ApiWorker<Weather> apiWorker = new ApiWorker<Weather>(new ApiWeatherJson(), new WeatherOWMSetting(url));
             apiWorker.EventStart += Show;
-            int millisec;
 
-            if (TimeParse == null)
+            int millisec = Convert.ToInt16(WeatherSett.TimeParse) * 1000;
+
+            if (millisec < 1000)
             {
-                millisec = 30000;
-            }
-            else
-            {
-                millisec = Convert.ToInt16(TimeParse) * 1000;
+                millisec = 1000;
             }
 
             apiWorker.Start(millisec);
         }
 
-        public string City
+        private void Show(Weather obj)
+        {
+            Temp = WeatherSetting.MeasureTempSet(obj.Temperature, WeatherSett.MeasureTemp).ToString();
+            Pressure = WeatherSetting.MeasurePressureSet(obj.Pressure, WeatherSett.MeasurePressure).ToString();
+            Humidity = obj.Humidity.ToString();
+        }
+
+        public string Region
         {
             get
             {
-                return _city;
+                return WeatherSett.Region;
             }
             set
             {
-                _city = value;
-                OnPropertyChanged("City");
-                if (City == "Anna Pavlovskaya")
-                {
-
-                }
-                else
-                {
-                    StartParse();
-                }
+                WeatherSett.Region = value;
+                OnPropertyChanged("Region");
+                StartParse();
             }
         }
 
@@ -71,14 +60,7 @@ namespace WeatherWpf.ViewModels
         {
             get
             {
-                if (City == "Anna Pavlovskaya")
-                {
-                    return "Temperature: 36.6 " + MeasureTemp;
-                }
-                else
-                {
-                    return "Temperature: " + _weather.Temperature.ToString() + " " + MeasureTemp;
-                }
+                return $"Temperature: {_weather.Temperature.ToString()} {WeatherSett.MeasureTemp}";
             }
             set
             {
@@ -87,43 +69,29 @@ namespace WeatherWpf.ViewModels
             }
         }
 
-        public string Humidity
-        {
-            get
-            {
-                if (City == "Anna Pavlovskaya")
-                {
-                    return "Humidity: 30 %";
-                }
-                else
-                {
-                    return "Humidity: " + _weather.Humidity.ToString() + " %";
-                }
-            }
-            set
-            {
-                _weather.Humidity = Convert.ToDouble(value);
-                OnPropertyChanged("Humidity");
-            }
-        }
-
         public string Pressure
         {
             get
             {
-                if (City == "Anna Pavlovskaya")
-                {
-                    return "Pressure: Normal";
-                }
-                else
-                {
-                    return "Pressure: " + _weather.Pressure.ToString() + " " + MeasurePressure;
-                }
+                return $"Pressure: {_weather.Pressure.ToString()} {WeatherSett.MeasurePressure}";
             }
             set
             {
                 _weather.Pressure = Convert.ToDouble(value);
                 OnPropertyChanged("Pressure");
+            }
+        }
+
+        public string Humidity
+        {
+            get
+            {
+                return $"Humidity: {_weather.Humidity.ToString()} %";
+            }
+            set
+            {
+                _weather.Humidity = Convert.ToDouble(value);
+                OnPropertyChanged("Humidity");
             }
         }
     }

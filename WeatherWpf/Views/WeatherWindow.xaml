@@ -7,7 +7,7 @@
         xmlns:vm="clr-namespace:WeatherWpf.ViewModels"
         mc:Ignorable="d"
         Style="{StaticResource WeatherWindow}"
-        Title="{Binding City}">
+        Title="{Binding Region}">
 
     <Window.DataContext>
         <vm:WeatherViewModel/>
@@ -17,13 +17,13 @@
         <StackPanel>
             <TextBlock Text="{Binding Temp}"
                        Style="{StaticResource BaseTextBlock}"
-                       Margin="10"/>
+                       Margin="8"/>
             <TextBlock Text="{Binding Pressure}"
                        Style="{StaticResource BaseTextBlock}"
-                       Margin="10"/>
+                       Margin="8"/>
             <TextBlock Text="{Binding Humidity}"
                        Style="{StaticResource BaseTextBlock}"
-                       Margin="10"/>
+                       Margin="8"/>
         </StackPanel>
     </Grid>
 </Window>

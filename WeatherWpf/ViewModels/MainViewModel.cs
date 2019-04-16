@@ -23,14 +23,14 @@ namespace WeatherWpf.ViewModels
         }
 
         private List<WeatherSetting> _weatherSettings;
-        private string _textBoxCity;
+        private string _textBoxRegion;
         private string _measureTemp;
         private bool _measureTempC;
         private bool _measureTempF;
         private string _measurePressure;
         private bool _measurePressureHpa;
         private bool _measurePressureBar;
-        private string _timeParse;
+        private int _timeParse;
 
         public ICommand ButtonStart
         {
@@ -40,8 +40,10 @@ namespace WeatherWpf.ViewModels
                 {
                     WeatherSetting weatherSetting = new WeatherSetting
                     {
-                        City = _textBoxCity,
-                        MeasureTemp = _measureTemp
+                        Region = TextBoxRegion,
+                        MeasureTemp = _measureTemp,
+                        MeasurePressure = _measurePressure,
+                        TimeParse = _timeParse
                     };
 
                     if (_weatherSettings.Contains<WeatherSetting>(weatherSetting)) return;
@@ -51,10 +53,8 @@ namespace WeatherWpf.ViewModels
                     {
                         DataContext = new WeatherViewModel
                         {
-                            City = _textBoxCity,
-                            MeasureTemp = _measureTemp,
-                            MeasurePressure = _measurePressure,
-                            TimeParse = _timeParse
+                            WeatherSett = weatherSetting,
+                            Region = TextBoxRegion
                         }
                     };
                     iv.Show();
@@ -114,16 +114,16 @@ namespace WeatherWpf.ViewModels
             }
         }
 
-        public string TextBoxCity
+        public string TextBoxRegion
         {
             get
             {
-                return _textBoxCity;
+                return _textBoxRegion;
             }
             set
             {
-                _textBoxCity = value;
-                OnPropertyChanged("TextBoxCity");
+                _textBoxRegion = value;
+                OnPropertyChanged("TextBoxRegion");
             }
         }
 
@@ -179,7 +179,7 @@ namespace WeatherWpf.ViewModels
             }
         }
 
-        public string TimeParse
+        public int TimeParse
         {
             get
             {

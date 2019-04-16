@@ -6,7 +6,7 @@
         <Setter Property="ResizeMode" Value="NoResize"/>
         <Setter Property="AllowsTransparency" Value="False"/>
         <Setter Property="Icon" Value="icoWindow.ico"/>
-        <Setter Property="Background" Value="White"/>
+        <Setter Property="Background" Value="WhiteSmoke"/>
         <Setter Property="BorderBrush" Value="Gray"/>
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="WindowState" Value="Normal"/>

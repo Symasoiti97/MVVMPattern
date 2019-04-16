@@ -11,7 +11,7 @@ namespace WeatherWpf.Models
         public string MeasureTemp { get; set; }
         public string MeasurePressure { get; set; }
         public string MeasureHumidity { get; set; }
-        public string City { get; set; }
+        public string Region { get; set; }
         public int TimeParse { get; set; }
 
         public static double MeasureTempSet(double temp, string measure)
@@ -38,7 +38,7 @@ namespace WeatherWpf.Models
 
         public bool Equals(WeatherSetting other)
         {
-            return City.Equals(other.City);
+            return Region.Equals(other.Region);
             //Решить вопрос с null
             // && MeasureTemp.Equals(other.MeasureTemp) && MeasurePressure.Equals(other.MeasurePressure) 
             //&& MeasureHumidity.Equals(other.MeasureHumidity); && TimeParse.Equals(other.TimeParse);
