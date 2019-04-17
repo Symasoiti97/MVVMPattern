@@ -4,10 +4,12 @@ using System;
 using WeatherWpf.Models.WeatherApi;
 using System.Configuration;
 using WeatherWpf.Models;
+using System.Windows.Input;
+using WeatherWpf.Commands;
 
 namespace WeatherWpf.ViewModels
 {
-    class WeatherViewModel : BaseViewModel
+    public class WeatherViewModel : BaseViewModel
     {
         public WeatherViewModel()
         {
@@ -15,15 +17,29 @@ namespace WeatherWpf.ViewModels
             WeatherSett = new WeatherSetting();
         }
 
+        private ApiWorker<Weather> _apiWorker;
         private Weather _weather;
+        private WeatherSetting _weatherSetting;
 
-        public WeatherSetting WeatherSett { get; set; }
+        public WeatherSetting WeatherSett
+        {
+            get
+            {
+                return _weatherSetting;
+            }
+            set
+            {
+                _weatherSetting = value;
+                StartParse();
+            }
+        }
 
         private void StartParse()
         {
+
             string url = ConfigurationManager.AppSettings.Get("JsonOWM").Replace("Region", WeatherSett.Region); ;
-            ApiWorker<Weather> apiWorker = new ApiWorker<Weather>(new ApiWeatherJson(), new WeatherOWMSetting(url));
-            apiWorker.EventStart += Show;
+            _apiWorker = new ApiWorker<Weather>(new ApiWeatherJson(), new WeatherOWMSetting(url));
+            _apiWorker.EventStart += Show;
 
             int millisec = Convert.ToInt16(WeatherSett.TimeParse) * 1000;
 
@@ -32,13 +48,13 @@ namespace WeatherWpf.ViewModels
                 millisec = 1000;
             }
 
-            apiWorker.Start(millisec);
+            _apiWorker.Start(millisec);
         }
 
         private void Show(Weather obj)
         {
-            Temp = WeatherSetting.MeasureTempSet(obj.Temperature, WeatherSett.MeasureTemp).ToString();
-            Pressure = WeatherSetting.MeasurePressureSet(obj.Pressure, WeatherSett.MeasurePressure).ToString();
+            Temp = WeatherSett.MeasureTempSet(obj.Temperature).ToString();
+            Pressure = WeatherSett.MeasurePressureSet(obj.Pressure).ToString();
             Humidity = obj.Humidity.ToString();
         }
 
@@ -52,7 +68,17 @@ namespace WeatherWpf.ViewModels
             {
                 WeatherSett.Region = value;
                 OnPropertyChanged("Region");
-                StartParse();
+            }
+        }
+
+        public ICommand ClosingWindow
+        {
+            get
+            {
+                return new DelegateCommand((obj) =>
+                {
+                    _apiWorker.Abort(); 
+                });
             }
         }
 

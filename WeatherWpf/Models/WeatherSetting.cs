@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WeatherWpf.Models
 {
-    class WeatherSetting
+    public class WeatherSetting : IEquatable<WeatherSetting>, IWeatherSetting
     {
         public string MeasureTemp { get; set; }
         public string MeasurePressure { get; set; }
@@ -14,9 +14,9 @@ namespace WeatherWpf.Models
         public string Region { get; set; }
         public int TimeParse { get; set; }
 
-        public static double MeasureTempSet(double temp, string measure)
+        public double MeasureTempSet(double temp)
         {
-            switch (measure)
+            switch (MeasureTemp)
             {
                 case "C": break;
                 case "F": temp = (temp * 9 / 5) + 32; break;
@@ -25,9 +25,9 @@ namespace WeatherWpf.Models
             return temp;
         }
 
-        public static double MeasurePressureSet(double pressure, string measure)
+        public double MeasurePressureSet(double pressure)
         {
-            switch (measure)
+            switch (MeasurePressure)
             {
                 case "pha": break;
                 case "bar": pressure = pressure * 1000 / 100000; break;
@@ -38,6 +38,10 @@ namespace WeatherWpf.Models
 
         public bool Equals(WeatherSetting other)
         {
+            if (Region == null && other.Region == null) return true;
+            else if (Region == null) return false;
+            else if (other.Region == null) return false;
+
             return Region.Equals(other.Region);
             //Решить вопрос с null
             // && MeasureTemp.Equals(other.MeasureTemp) && MeasurePressure.Equals(other.MeasurePressure) 

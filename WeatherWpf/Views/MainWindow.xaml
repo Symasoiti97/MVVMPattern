@@ -28,8 +28,10 @@
                      Margin="5"
                      MinWidth="130"
                      MaxWidth="130"/>
-            <TextBox Text="{Binding TimeParse, StringFormat=100}"
+            <TextBox Text="{Binding TimeParse}"
                      Style="{StaticResource BaseTextBox}"
+                     ToolTip="Update frequency"
+                     BorderThickness="0"
                      Tag="Time Parse"
                      FontSize="14"
                      TextAlignment="Center"

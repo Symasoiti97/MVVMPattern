@@ -41,6 +41,9 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Expression.Blend.Sdk.1.0.2\lib\net45\System.Windows.Interactivity.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -61,6 +64,7 @@
     </ApplicationDefinition>
     <Compile Include="Commands\DelegateCommand.cs" />
     <Compile Include="Converters\CheckBoxConverter.cs" />
+    <Compile Include="Models\IWeatherSetting.cs" />
     <Compile Include="Models\WeatherApi\ApiWeatherJson.cs" />
     <Compile Include="Models\WeatherApi\Weather.cs" />
     <Compile Include="Models\WeatherApi\WeatherOWMSetting.cs" />
@@ -78,6 +82,10 @@
     <Compile Include="Views\WeatherWindow.xaml.cs">
       <DependentUpon>WeatherWindow.xaml</DependentUpon>
     </Compile>
+    <Page Include="Styles\Buttons.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Styles\Texts.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

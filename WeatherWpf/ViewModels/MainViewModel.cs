@@ -19,6 +19,7 @@ namespace WeatherWpf.ViewModels
             MeasureTempC = true;
             _measureTemp = "C";
             _measurePressure = "hpa";
+            TimeParse = 120;
 
         }
 
@@ -43,21 +44,22 @@ namespace WeatherWpf.ViewModels
                         Region = TextBoxRegion,
                         MeasureTemp = _measureTemp,
                         MeasurePressure = _measurePressure,
-                        TimeParse = _timeParse
+                        TimeParse = TimeParse
                     };
 
-                    if (_weatherSettings.Contains<WeatherSetting>(weatherSetting)) return;
-                    _weatherSettings.Add(weatherSetting);
-
-                    var iv = new WeatherWindow()
+                    if (!_weatherSettings.Contains<WeatherSetting>(weatherSetting))
                     {
-                        DataContext = new WeatherViewModel
+                        _weatherSettings.Add(weatherSetting);
+
+                        var weatherWindow = new WeatherWindow()
                         {
-                            WeatherSett = weatherSetting,
-                            Region = TextBoxRegion
-                        }
-                    };
-                    iv.Show();
+                            DataContext = new WeatherViewModel
+                            {
+                                WeatherSett = weatherSetting,
+                            }
+                        };
+                        weatherWindow.Show();
+                    }
                 });
             }
         }

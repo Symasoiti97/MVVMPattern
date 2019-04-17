@@ -21,7 +21,7 @@
     <Style x:Key="WeatherWindow" BasedOn="{StaticResource BaseWindow}" TargetType="{x:Type Window}">
         <Setter Property="Title" Value="Weather Region"/>
         <Setter Property="Height" Value="150"/>
-        <Setter Property="Width" Value="200"/>
+        <Setter Property="Width" Value="205"/>
     </Style>
     
 </ResourceDictionary>
