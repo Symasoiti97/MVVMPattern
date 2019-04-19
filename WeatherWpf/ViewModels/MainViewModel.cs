@@ -6,11 +6,12 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using WeatherWpf.Commands;
 using WeatherWpf.Models;
+using WeatherWpf.Validation;
 using WeatherWpf.Views;
 
 namespace WeatherWpf.ViewModels
 {
-    public class MainViewModel : BaseViewModel
+    public class MainViewModel : BaseViewModel, IDataErrorInfo
     {
         public MainViewModel()
         {
@@ -20,7 +21,7 @@ namespace WeatherWpf.ViewModels
             _measureTemp = "C";
             _measurePressure = "hpa";
             TimeParse = 120;
-
+            TextBoxRegion = "";
         }
 
         private List<WeatherSetting> _weatherSettings;
@@ -39,28 +40,34 @@ namespace WeatherWpf.ViewModels
             {
                 return new DelegateCommand((obj) =>
                 {
-                    WeatherSetting weatherSetting = new WeatherSetting
-                    {
-                        Region = TextBoxRegion,
-                        MeasureTemp = _measureTemp,
-                        MeasurePressure = _measurePressure,
-                        TimeParse = TimeParse
-                    };
-
-                    if (!_weatherSettings.Contains<WeatherSetting>(weatherSetting))
-                    {
-                        _weatherSettings.Add(weatherSetting);
-
-                        var weatherWindow = new WeatherWindow()
-                        {
-                            DataContext = new WeatherViewModel
-                            {
-                                WeatherSett = weatherSetting,
-                            }
-                        };
-                        weatherWindow.Show();
-                    }
+                    OpenWeatherWeapon();
                 });
+            }
+        }
+
+        private void OpenWeatherWeapon()
+        {
+            WeatherSetting weatherSetting = new WeatherSetting
+            {
+                Region = TextBoxRegion,
+                MeasureTemp = _measureTemp,
+                MeasurePressure = _measurePressure,
+                TimeParse = TimeParse
+            };
+
+            if (!_weatherSettings.Contains<WeatherSetting>(weatherSetting))
+            {
+                _weatherSettings.Add(weatherSetting);
+
+                var weatherWindow = new WeatherWindow()
+                {
+                    DataContext = new WeatherViewModel
+                    {
+                        WeatherSett = weatherSetting,
+                        WeatherSettings = _weatherSettings
+                    }
+                };
+                weatherWindow.Show();
             }
         }
 
@@ -191,6 +198,41 @@ namespace WeatherWpf.ViewModels
             {
                 _timeParse = value;
                 OnPropertyChanged("TimeParse");
+            }
+        }
+
+        public string this[string columnName]
+        {
+            get
+            {
+                string error = String.Empty;
+
+                switch (columnName)
+                {
+                    case "TextBoxRegion":
+                        if (TextBoxRegion == "")
+                        {
+                            error = "Region is null";
+                        }
+                        break;
+
+                    case "TimeParse":
+                        if (TimeParse < 1)
+                        {
+                            error = "TimeParse < 1";
+                        }
+                        break;
+                }
+
+                return Error;
+            }
+        }
+
+        public string Error
+        {
+            get
+            {
+                throw new NotImplementedException();
             }
         }
     }

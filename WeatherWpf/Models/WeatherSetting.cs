@@ -10,7 +10,7 @@ namespace WeatherWpf.Models
     {
         public string MeasureTemp { get; set; }
         public string MeasurePressure { get; set; }
-        public string MeasureHumidity { get; set; }
+        //public string MeasureHumidity { get; set; }
         public string Region { get; set; }
         public int TimeParse { get; set; }
 
@@ -38,14 +38,8 @@ namespace WeatherWpf.Models
 
         public bool Equals(WeatherSetting other)
         {
-            if (Region == null && other.Region == null) return true;
-            else if (Region == null) return false;
-            else if (other.Region == null) return false;
-
-            return Region.Equals(other.Region);
-            //Решить вопрос с null
-            // && MeasureTemp.Equals(other.MeasureTemp) && MeasurePressure.Equals(other.MeasurePressure) 
-            //&& MeasureHumidity.Equals(other.MeasureHumidity); && TimeParse.Equals(other.TimeParse);
+            return Region.Equals(other.Region) && MeasureTemp.Equals(other.MeasureTemp) 
+                && MeasurePressure.Equals(other.MeasurePressure) && TimeParse.Equals(other.TimeParse);
         }
     }
 }

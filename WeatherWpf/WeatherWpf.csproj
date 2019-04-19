@@ -69,6 +69,7 @@
     <Compile Include="Models\WeatherApi\Weather.cs" />
     <Compile Include="Models\WeatherApi\WeatherOWMSetting.cs" />
     <Compile Include="Models\WeatherSetting.cs" />
+    <Compile Include="Validation\IDataErrorInfo.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\WeatherViewModel.cs" />
@@ -139,5 +140,6 @@
   <ItemGroup>
     <Resource Include="Styles\icoWindow.ico" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

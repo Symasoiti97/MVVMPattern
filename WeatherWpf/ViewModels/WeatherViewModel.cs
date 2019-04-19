@@ -6,6 +6,7 @@ using System.Configuration;
 using WeatherWpf.Models;
 using System.Windows.Input;
 using WeatherWpf.Commands;
+using System.Collections.Generic;
 
 namespace WeatherWpf.ViewModels
 {
@@ -16,6 +17,8 @@ namespace WeatherWpf.ViewModels
             _weather = new Weather();
             WeatherSett = new WeatherSetting();
         }
+
+        public List<WeatherSetting> WeatherSettings { get; set; }
 
         private ApiWorker<Weather> _apiWorker;
         private Weather _weather;
@@ -37,7 +40,7 @@ namespace WeatherWpf.ViewModels
         private void StartParse()
         {
 
-            string url = ConfigurationManager.AppSettings.Get("JsonOWM").Replace("Region", WeatherSett.Region); ;
+            string url = ConfigurationManager.AppSettings.Get("JsonOWM").Replace("Region", WeatherSett.Region);
             _apiWorker = new ApiWorker<Weather>(new ApiWeatherJson(), new WeatherOWMSetting(url));
             _apiWorker.EventStart += Show;
 
@@ -58,6 +61,18 @@ namespace WeatherWpf.ViewModels
             Humidity = obj.Humidity.ToString();
         }
 
+        public ICommand ClosingWindow
+        {
+            get
+            {
+                return new DelegateCommand((obj) =>
+                {
+                    _apiWorker.Abort();
+                    WeatherSettings.Remove(_weatherSetting);
+                });
+            }
+        }
+
         public string Region
         {
             get
@@ -68,17 +83,6 @@ namespace WeatherWpf.ViewModels
             {
                 WeatherSett.Region = value;
                 OnPropertyChanged("Region");
-            }
-        }
-
-        public ICommand ClosingWindow
-        {
-            get
-            {
-                return new DelegateCommand((obj) =>
-                {
-                    _apiWorker.Abort(); 
-                });
             }
         }
 

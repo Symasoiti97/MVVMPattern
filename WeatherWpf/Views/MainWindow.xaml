@@ -22,12 +22,19 @@
 
         <StackPanel Grid.Row="0" Orientation="Horizontal">
 
-            <TextBox Text="{Binding TextBoxRegion}"
-                     Style="{StaticResource BaseTextBox}"
+            <TextBox Style="{StaticResource BaseTextBox}"
                      Tag="Region"
                      Margin="5"
                      MinWidth="130"
-                     MaxWidth="130"/>
+                     MaxWidth="130">
+                <TextBox.Text>
+                    <Binding Path="TextBoxRegion">
+                        <Binding.ValidationRules>
+                            <DataErrorValidationRule />
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
             <TextBox Text="{Binding TimeParse}"
                      Style="{StaticResource BaseTextBox}"
                      ToolTip="Update frequency"
@@ -98,7 +105,7 @@
             </StackPanel>
         </Grid>
 
-        <Button Grid.Row="2"
+        <Button Grid.Row="2" x:Name="ButtonStart"
                 Style="{StaticResource BaseButton}"
                 Command="{Binding ButtonStart}"
                 Content="Current Weather"/>
