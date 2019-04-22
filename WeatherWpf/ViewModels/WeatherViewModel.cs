@@ -15,11 +15,10 @@ namespace WeatherWpf.ViewModels
         public WeatherViewModel()
         {
             _weather = new Weather();
-            WeatherSett = new WeatherSetting();
+            _collectionWeather = CollectionWeatherSetting.GetInstance();
         }
 
-        public List<WeatherSetting> WeatherSettings { get; set; }
-
+        private ICollectionWeatherSetting _collectionWeather;
         private ApiWorker<Weather> _apiWorker;
         private Weather _weather;
         private WeatherSetting _weatherSetting;
@@ -68,7 +67,7 @@ namespace WeatherWpf.ViewModels
                 return new DelegateCommand((obj) =>
                 {
                     _apiWorker.Abort();
-                    WeatherSettings.Remove(_weatherSetting);
+                    _collectionWeather.Remove(_weatherSetting);
                 });
             }
         }

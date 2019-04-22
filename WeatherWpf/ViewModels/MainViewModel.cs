@@ -15,7 +15,7 @@ namespace WeatherWpf.ViewModels
     {
         public MainViewModel()
         {
-            _weatherSettings = new List<WeatherSetting>();
+            _collectionWeather = CollectionWeatherSetting.GetInstance();
             MeasurePressureHpa = true;
             MeasureTempC = true;
             _measureTemp = "C";
@@ -24,7 +24,7 @@ namespace WeatherWpf.ViewModels
             TextBoxRegion = "";
         }
 
-        private List<WeatherSetting> _weatherSettings;
+        private ICollectionWeatherSetting _collectionWeather;
         private string _textBoxRegion;
         private string _measureTemp;
         private bool _measureTempC;
@@ -55,16 +55,13 @@ namespace WeatherWpf.ViewModels
                 TimeParse = TimeParse
             };
 
-            if (!_weatherSettings.Contains<WeatherSetting>(weatherSetting))
+            if (_collectionWeather.Add(weatherSetting))
             {
-                _weatherSettings.Add(weatherSetting);
-
                 var weatherWindow = new WeatherWindow()
                 {
                     DataContext = new WeatherViewModel
                     {
                         WeatherSett = weatherSetting,
-                        WeatherSettings = _weatherSettings
                     }
                 };
                 weatherWindow.Show();

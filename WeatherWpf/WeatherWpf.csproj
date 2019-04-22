@@ -64,6 +64,8 @@
     </ApplicationDefinition>
     <Compile Include="Commands\DelegateCommand.cs" />
     <Compile Include="Converters\CheckBoxConverter.cs" />
+    <Compile Include="Models\CollectionWeatherSetting.cs" />
+    <Compile Include="Models\ICollectionWeatherSetting.cs" />
     <Compile Include="Models\IWeatherSetting.cs" />
     <Compile Include="Models\WeatherApi\ApiWeatherJson.cs" />
     <Compile Include="Models\WeatherApi\Weather.cs" />
