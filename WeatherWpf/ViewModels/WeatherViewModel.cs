@@ -38,9 +38,7 @@ namespace WeatherWpf.ViewModels
 
         private void StartParse()
         {
-
-            string url = ConfigurationManager.AppSettings.Get("JsonOWM").Replace("Region", WeatherSett.Region);
-            _apiWorker = new ApiWorker<Weather>(new ApiWeatherJson(), new WeatherOWMSetting(url));
+            _apiWorker = new ApiWorker<Weather>(new ApiWeatherJson(), new WeatherOWMSetting(_weatherSetting.Region));
             _apiWorker.EventStart += Show;
 
             int millisec = Convert.ToInt16(WeatherSett.TimeParse) * 1000;

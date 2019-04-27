@@ -1,4 +1,5 @@
 ﻿using Api.API;
+using System.Configuration;
 
 namespace ObserverPattern.API.ApiOWM
 {
@@ -6,9 +7,11 @@ namespace ObserverPattern.API.ApiOWM
     {
         public string Url { get; }
 
-        public WeatherOWMSetting(string url)
+        public WeatherOWMSetting(string Region)
         {
-            Url = url;
+            string url = ConfigurationManager.AppSettings.Get("JsonOWM").Replace("Region", Region);
+
+            Url = string.Format(url, Region);
         }
     }
 }
