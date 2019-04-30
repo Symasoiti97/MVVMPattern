@@ -13,6 +13,16 @@ namespace WeatherWpf.ViewModels
 {
     public class MainViewModel : BaseViewModel, IDataErrorInfo
     {
+        private ICollectionWeatherSetting _collectionWeather;
+        private string _textBoxRegion;
+        private string _measureTemp;
+        private bool _measureTempC;
+        private bool _measureTempF;
+        private string _measurePressure;
+        private bool _measurePressureHpa;
+        private bool _measurePressureBar;
+        private int _timeParse;
+
         public MainViewModel()
         {
             _collectionWeather = CollectionWeatherSetting.GetInstance();
@@ -23,16 +33,6 @@ namespace WeatherWpf.ViewModels
             TimeParse = 120;
             TextBoxRegion = "";
         }
-
-        private ICollectionWeatherSetting _collectionWeather;
-        private string _textBoxRegion;
-        private string _measureTemp;
-        private bool _measureTempC;
-        private bool _measureTempF;
-        private string _measurePressure;
-        private bool _measurePressureHpa;
-        private bool _measurePressureBar;
-        private int _timeParse;
 
         public ICommand ButtonStart
         {

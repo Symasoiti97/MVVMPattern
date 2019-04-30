@@ -12,14 +12,9 @@ namespace Api.API
 {
     public class ApiWorker<T> where T : class
     {
-        private int _millisec = 30000;
 
         private readonly IApiSetting _apiSetting;
         private readonly IApi<T> _api;
-
-        private CancellationTokenSource token;
-
-        private bool _isActive = false;
 
         public event Action<T> EventStart;
         public event Action EventAbort;
@@ -30,52 +25,25 @@ namespace Api.API
             _apiSetting = apiSetting;
         }
 
-        public void Start()
+        public void Parse()
         {
-            _isActive = true;
-            token = new CancellationTokenSource();
-            Worker(token.Token);
+            Worker();
         }
 
-        public void Start(int millisec)
-        {
-            _isActive = true;
-            _millisec = millisec;
-            token = new CancellationTokenSource();
-            Worker(token.Token);
-        }
-
-        public void Abort()
-        {
-            _isActive = false;
-            token?.Cancel();
-        }
-
-        private async Task Worker(CancellationToken token)
+        private async Task Worker()
         {
             using (WebClient webClient = new WebClient())
             {
                 webClient.Encoding = Encoding.UTF8;
 
-                while (_isActive)
-                {
-                    var reader = await webClient.DownloadStringTaskAsync(_apiSetting.Url);
+                var reader = await webClient.DownloadStringTaskAsync(_apiSetting.Url);
 
-                    var list = _api.Parse(reader);
+                var list = _api.Parse(reader);
 
-                    EventStart?.Invoke(list);
+                EventStart?.Invoke(list);
 
-                    try
-                    {
-                        await Task.Delay(_millisec, token);
-                    }
-                    catch (OperationCanceledException ex)
-                    {
-                    }
-                }
+                EventAbort?.Invoke();
             }
-
-            EventAbort?.Invoke();
         }
     }
 }

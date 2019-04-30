@@ -7,21 +7,23 @@ using WeatherWpf.Models;
 using System.Windows.Input;
 using WeatherWpf.Commands;
 using System.Collections.Generic;
+using System.Windows.Threading;
 
 namespace WeatherWpf.ViewModels
 {
     public class WeatherViewModel : BaseViewModel
     {
+        private ICollectionWeatherSetting _collectionWeather;
+        private ApiWorker<Weather> _apiWorker;
+        private Weather _weather;
+        private WeatherSetting _weatherSetting;
+        private DispatcherTimer _timer;
+
         public WeatherViewModel()
         {
             _weather = new Weather();
             _collectionWeather = CollectionWeatherSetting.GetInstance();
         }
-
-        private ICollectionWeatherSetting _collectionWeather;
-        private ApiWorker<Weather> _apiWorker;
-        private Weather _weather;
-        private WeatherSetting _weatherSetting;
 
         public WeatherSetting WeatherSett
         {
@@ -32,30 +34,8 @@ namespace WeatherWpf.ViewModels
             set
             {
                 _weatherSetting = value;
-                StartParse();
+                StartTimer();
             }
-        }
-
-        private void StartParse()
-        {
-            _apiWorker = new ApiWorker<Weather>(new ApiWeatherJson(), new WeatherOWMSetting(_weatherSetting.Region));
-            _apiWorker.EventStart += Show;
-
-            int millisec = Convert.ToInt16(WeatherSett.TimeParse) * 1000;
-
-            if (millisec < 1000)
-            {
-                millisec = 1000;
-            }
-
-            _apiWorker.Start(millisec);
-        }
-
-        private void Show(Weather obj)
-        {
-            Temp = WeatherSett.MeasureTempSet(obj.Temperature).ToString();
-            Pressure = WeatherSett.MeasurePressureSet(obj.Pressure).ToString();
-            Humidity = obj.Humidity.ToString();
         }
 
         public ICommand ClosingWindow
@@ -64,7 +44,6 @@ namespace WeatherWpf.ViewModels
             {
                 return new DelegateCommand((obj) =>
                 {
-                    _apiWorker.Abort();
                     _collectionWeather.Remove(_weatherSetting);
                 });
             }
@@ -120,6 +99,36 @@ namespace WeatherWpf.ViewModels
                 _weather.Humidity = Convert.ToDouble(value);
                 OnPropertyChanged("Humidity");
             }
+        }
+
+        private void StartTimer()
+        {
+            _apiWorker = new ApiWorker<Weather>(new ApiWeatherJson(), new WeatherOWMSetting(_weatherSetting.Region));
+            _apiWorker.EventStart += Show;
+
+            int millisec = Convert.ToInt16(WeatherSett.TimeParse) * 1000;
+
+            if (millisec < 1000)
+            {
+                millisec = 1000;
+            }
+
+            _timer = new DispatcherTimer();
+            _timer.Tick += new EventHandler(Timer_Tick);
+            _timer.Interval = new TimeSpan(0, 0, 1);
+            _timer.Start();
+        }
+
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            _apiWorker.Parse();
+        }
+
+        private void Show(Weather obj)
+        {
+            Temp = WeatherSett.MeasureTempSet(obj.Temperature).ToString();
+            Pressure = WeatherSett.MeasurePressureSet(obj.Pressure).ToString();
+            Humidity = obj.Humidity.ToString();
         }
     }
 }
